@@ -469,10 +469,10 @@ function renderAssets() {
   `).join("");
 }
 
-// ファイル画面へ登録済み画像を検索結果として並べる。
+// 有効な標準画像とアップロード済み画像を、ファイル画面の左側へ並べる。
 function renderLibraryAssets() {
   const search = document.querySelector("#librarySearch").value.trim().toLowerCase();
-  document.querySelector("#libraryAssetGrid").innerHTML = state.customAssets.filter(asset => !search || asset.label.toLowerCase().includes(search)).map(asset => `<div class="library-asset-card"><button class="library-asset" type="button" data-library-asset="${asset.id}" title="${escapeHtml(asset.label)}">${assetVisual(asset)}</button><button class="asset-more asset-edit-button" type="button" data-edit-library-asset="${asset.id}" aria-label="${escapeHtml(asset.label)}を編集">•••</button></div>`).join("");
+  document.querySelector("#libraryAssetGrid").innerHTML = getAllAssets().filter(asset => asset.custom || isAssetEnabled(asset)).filter(asset => !search || `${asset.label} ${asset.sourceName || ""} ${asset.keywords || ""} ${asset.code || ""}`.toLowerCase().includes(search)).map(asset => `<div class="library-asset-card"><button class="library-asset" type="button" data-library-asset="${asset.id}" title="${escapeHtml(asset.label)}">${assetVisual(asset)}</button><button class="asset-more asset-edit-button" type="button" data-edit-library-asset="${asset.id}" aria-label="${escapeHtml(asset.label)}を編集">•••</button></div>`).join("");
 }
 
 // 標準・自作画像の編集を、呼び出し元を保持したポップアップで開く。
