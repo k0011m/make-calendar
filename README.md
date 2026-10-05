@@ -15,6 +15,9 @@ PowerShellでこのフォルダへ移動し、静的サーバーを起動しま�
 
 ## GitHub Pages公開
 
+- 公開URL: https://k0011m.github.io/make-calendar/
+- リポジトリ: https://github.com/k0011m/make-calendar
+
 GitHub Actionsがmainへのpushを受けて、node build.mjsで生成したdistだけをGitHub Pagesへ公開します。依存パッケージのインストールは不要です。設定は.github/workflows/pages.ymlです。READMEのみの変更では自動公開しません。Actions画面から手動実行もできます。
 
 更新手順:
