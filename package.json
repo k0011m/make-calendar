@@ -1,0 +1,7 @@
+{
+  "name": "make-illustration-calendar",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}

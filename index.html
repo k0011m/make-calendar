@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f4d9">
+  <meta name="description" content="MAKEイラストカレンダー">
+  <title>MAKEイラストカレンダー</title>
+  <link rel="stylesheet" href="style.css?v=23">
+</head>
+<body data-view="login">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="MAKEイラストカレンダー ホーム">MAKEイラストカレンダー</a>
+    <button class="settings-button" id="settingsButton" type="button" aria-label="表示設定"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.09a2 2 0 0 1 1 1.74v.5a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg></button>
+  </header>
+
+  <main>
+    <section class="login-view" id="loginView">
+      <div class="login-card">
+        <div class="login-symbol" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="40" rx="8"/><path d="M20 9v12M44 9v12M10 26h44M22 35h7M35 35h7M22 44h7M35 44h7"/></svg>
+        </div>
+        <h1>MAKEイラストカレンダー</h1>
+        <div class="login-actions">
+          <button class="primary-button login-chatgpt-button" id="chatgptLoginButton" type="button">ChatGPTでログイン</button>
+          <button class="secondary-button login-guest-button" id="guestLoginButton" type="button">ログインせず使う</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard" id="dashboardView" hidden>
+      <div class="list-toolbar">
+        <div class="filter-row" aria-label="カレンダーの絞り込み">
+          <button class="filter-chip active" type="button" data-filter="all">All</button>
+          <button class="filter-chip" type="button" data-filter="day">Day</button>
+          <button class="filter-chip" type="button" data-filter="week">Week</button>
+          <button class="filter-chip" type="button" data-filter="month">Month</button>
+        </div>
+        <input class="calendar-search" id="calendarSearch" type="search" placeholder="名前で検索" aria-label="カレンダー名で検索">
+        <div class="list-actions">
+          <button class="file-button" id="openFileButton" type="button" aria-label="ファイル"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h6l2 2h9v10h-17Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+          <button class="primary-button create-calendar-button" id="openCreateButton" type="button">＋ 作成</button>
+        </div>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+    </section>
+
+    <section class="editor" id="editorView" hidden>
+      <div class="editor-layout" id="editorLayout">
+        <nav class="asset-rail" aria-label="画像カテゴリ">
+          <button class="rail-button rail-upload" id="railUploadButton" type="button" aria-label="画像を追加"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h6l2 3h10v12H3Z"/><path d="M12 18v-6m-3 3 3-3 3 3"/></svg></button>
+          <span class="rail-divider"></span>
+          <button class="rail-button active" id="backButton" type="button"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v11h-6v-8H9v8H3Z"/></svg></span><small>全て</small></button>
+          <button class="rail-button asset-category-button" type="button" data-asset-category="life"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4c2-3 6-1 5 2-1 2-3 2-4 2l-4 5M9 9c-7-2-9 6-3 10s12-1 8-6Z"/><path d="m5 13 5 4"/></svg></span><small>生活</small></button>
+          <button class="rail-button asset-category-button" type="button" data-asset-category="school"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m2 8 10-5 10 5-10 5Zm4 3v7q6 5 12 0v-7M22 8v9"/></svg></span><small>学校</small></button>
+          <button class="rail-button asset-category-button" type="button" data-asset-category="people"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M3 22v-3a9 9 0 0 1 18 0v3"/></svg></span><small>人物</small></button>
+          <button class="rail-button asset-category-button" type="button" data-asset-category="play"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m5 5 14 14M3 12h18M12 3v18"/></svg></span><small>遊び</small></button>
+          <button class="rail-button asset-category-button" type="button" data-asset-category="action"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4" r="2"/><path d="m4 8 8 3 8-3M12 11v5m0 0-5 6m5-6 5 6"/></svg></span><small>行動</small></button>
+          <button class="rail-button asset-category-button" type="button" data-asset-category="event"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V10a8 8 0 0 1 16 0v11l-4-3-4 3-4-3Z"/><circle cx="9" cy="10" r=".6"/><circle cx="15" cy="10" r=".6"/></svg></span><small>行事</small></button>
+          <span class="rail-divider"></span>
+          <button class="rail-button" id="calendarSettingsButton" type="button"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="17" rx="2"/><path d="M7 2v6m10-6v6M3 11h18"/><circle cx="15" cy="16" r="3"/></svg></span><small>カレンダー</small></button>
+          <button class="rail-button" id="openDrawingButton" type="button"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-1 5 5-1L21 7l-4-4Z"/><path d="m14 6 4 4"/></svg></span><small>描く</small></button>
+        </nav>
+
+        <aside class="palette-panel" id="palettePanel">
+          <input class="asset-search" id="assetSearch" type="search" placeholder="画像を検索出来ます" aria-label="画像を検索">
+          <div class="asset-grid" id="assetGrid"></div>
+          <input class="visually-hidden" id="imageUploadInput" type="file" accept="image/*" multiple>
+        </aside>
+
+        <aside class="calendar-settings-panel" id="calendarSettingsPanel" hidden>
+          <div class="day-tools day-only-setting"><input id="newTimeInput" type="time" value="10:00" aria-label="追加する時間"><button class="small-primary" id="addTimeButton" type="button">時間の枠を追加 ＋</button></div>
+          <label class="setting-field" for="calendarTitle">カレンダー名<input id="calendarTitle" value="わたしの1日"></label>
+          <label class="setting-field" for="calendarDate"><span id="calendarDateLabel">カレンダーの日付</span><input id="calendarDate" type="date"></label>
+          <label class="setting-field" for="textStyle"><span id="textStyleLabel">日付の表記</span><select id="textStyle"><option value="kanji">漢字</option><option value="hiragana">ひらがな</option></select></label>
+          <label class="setting-field day-only-setting" for="timeStyle">時間表示<select id="timeStyle"><option value="kanji">漢字</option><option value="hiragana">ひらがな</option><option value="clock">時計イラスト</option></select></label>
+          <label class="setting-field week-month-setting" for="weekStart">週の始まり<select id="weekStart"><option value="monday">月曜日</option><option value="sunday">日曜日</option></select></label>
+          <label class="setting-field month-only-setting" for="monthCellCount">1日の枠数<select id="monthCellCount"><option value="1">1枠</option><option value="2">2枠</option><option value="3">3枠</option></select></label>
+          <label class="setting-field" for="calendarColorPreset">配色<select id="calendarColorPreset"></select></label>
+          <div id="scheduleColorFields"></div>
+          <label class="setting-field" for="calendarBackground">背景色<input id="calendarBackground" type="color" value="#fffdf7"></label>
+          <div class="settings-panel-actions">
+            <button class="secondary-button" id="clearButton" type="button">配置をクリア</button>
+            <button class="secondary-button" id="editorPrintButton" type="button">印刷</button>
+          </div>
+        </aside>
+
+        <section class="canvas-panel">
+          <div class="editor-hidden-controls visually-hidden">
+            <span id="editorTypeBadge">DAY</span>
+            <span id="saveStatus">保存済み</span>
+            <button id="saveButton" type="button">保存</button>
+            <button id="collapsePaletteButton" type="button" aria-expanded="true">収納</button>
+          </div>
+          <div class="calendar-canvas" id="calendarCanvas"></div>
+          <div class="canvas-footer"><button class="primary-button" id="footerSaveButton" type="button">保存</button></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="drawing-studio" id="drawingView" hidden>
+      <div class="drawing-heading"><button class="secondary-button" id="drawingToCalendarButton" type="button">カレンダーを見る</button></div>
+      <div class="drawing-layout">
+        <aside class="drawing-tools" aria-label="お絵かき道具">
+          <div class="drawing-tool-group"><p class="tool-label">道具</p><div class="segmented-tools"><button class="draw-mode-button active" type="button" data-draw-mode="pen" aria-pressed="true">✎ ペン</button><button class="draw-mode-button" type="button" data-draw-mode="eraser" aria-pressed="false">消しゴム</button></div></div>
+          <div class="drawing-tool-group"><label class="tool-label" for="colorPicker">色</label><div class="color-controls"><input id="colorPicker" type="color" value="#29352e" aria-label="線の色"><div class="color-swatches" id="colorSwatches"></div></div></div>
+          <div class="drawing-tool-group"><label class="tool-label" for="brushSize">太さ <output id="brushSizeOutput">12</output></label><input id="brushSize" type="range" min="2" max="48" value="12"></div>
+          <div class="drawing-tool-group history-tools"><button class="secondary-button compact-button" id="undoButton" type="button">↶ 戻す</button><button class="secondary-button compact-button" id="redoButton" type="button">↷ やり直す</button></div>
+          <button class="secondary-button clear-canvas-button" id="clearCanvasButton" type="button">白紙に戻す</button>
+        </aside>
+        <section class="drawing-workspace">
+          <div class="canvas-wrap"><canvas id="drawingCanvas" width="900" height="600" aria-label="イラストを描くキャンバス"></canvas></div>
+          <div class="drawing-save-panel"><label class="field-label" for="drawingName">イラスト名<input id="drawingName" value="わたしのイラスト" maxlength="30"></label><div class="drawing-save-actions"><button class="secondary-button" id="downloadDrawingButton" type="button">PNG保存</button><button class="primary-button" id="addDrawingButton" type="button">カレンダーで使う</button></div></div>
+          <section class="my-illustrations"><h2>登録した画像・イラスト</h2><div class="illustration-gallery" id="illustrationGallery"></div></section>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="library-dialog" id="fileDialog">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="閉じる">×</button>
+      <div class="library-dialog-body">
+        <section class="library-list">
+          <input id="librarySearch" type="search" placeholder="アップロード済みの画像を検索出来ます" aria-label="アップロード済みの画像を検索">
+          <div class="library-asset-grid" id="libraryAssetGrid"></div>
+        </section>
+        <section class="library-upload">
+          <div class="library-file-actions">
+            <label class="library-upload-button" for="libraryFileInput">アップロード</label>
+          </div>
+          <input class="visually-hidden" id="libraryFileInput" type="file" accept="image/*,.makecal,application/json" multiple>
+          <div class="library-dropzone" id="libraryDropzone">
+            <span class="library-dropzone-empty" id="libraryDropzoneEmpty"><span class="dropzone-icon">↥</span><strong>入力中/未確定のファイルを表示します</strong><span>ドラッグ＆ドロップでも追加できます。</span></span>
+            <span class="pending-upload-grid" id="pendingUploadGrid"></span>
+          </div>
+          <button class="primary-button library-confirm" id="libraryConfirmButton" type="button">確定</button>
+          <small class="library-upload-note">画像を.png 5MB以下に変換後、保存します</small>
+        </section>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="image-edit-dialog" id="imageEditDialog">
+    <form method="dialog">
+      <button class="image-edit-back" id="imageEditBackButton" type="button" aria-label="画像一覧へ戻る">←</button>
+      <div class="image-edit-body">
+        <div class="image-edit-preview" id="imageEditPreview"></div>
+        <section class="image-edit-fields">
+          <input class="image-edit-name-input" id="imageEditName" maxlength="30" placeholder="名前" aria-label="画像名">
+          <label class="setting-field" for="imageEditCategory">カテゴリー<select id="imageEditCategory"><option value="">未設定</option><option value="life">生活</option><option value="school">学校</option><option value="people">人物</option><option value="play">遊び</option><option value="action">行動</option><option value="event">行事</option></select></label>
+          <small>該当するものがあれば選択してください。</small>
+          <button class="danger-button" id="deleteImageButton" type="button">この画像を削除</button>
+        </section>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="create-dialog" id="createDialog">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="閉じる">×</button>
+      <div class="create-tabs" role="tablist" aria-label="カレンダー形式">
+        <button class="type-tab selected" type="button" role="tab" aria-selected="true" data-type="day">Day</button>
+        <button class="type-tab" type="button" role="tab" aria-selected="false" data-type="week">Week</button>
+        <button class="type-tab" type="button" role="tab" aria-selected="false" data-type="month">Month</button>
+      </div>
+      <div class="create-body">
+        <div class="create-preview" id="createPreview" aria-label="カレンダープレビュー"></div>
+        <button class="primary-button dialog-submit" id="createButton" type="button">作成</button>
+      </div>
+      <input id="newCalendarName" type="hidden" value="新しいカレンダー">
+      <input id="newCalendarDate" type="hidden">
+      <input id="createImageUpload" type="file" accept="image/*" hidden>
+      <span id="selectedFileName" hidden></span>
+    </form>
+  </dialog>
+
+  <dialog class="settings-dialog" id="settingsDialog">
+    <form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>設定</h2><label class="setting-check"><input id="largeTextSetting" type="checkbox"> 文字を大きくする</label><label class="setting-check"><input id="contrastSetting" type="checkbox"> コントラストを強くする</label><section class="asset-management" aria-label="使う画像">
+<h3>使う画像</h3>
+<div class="managed-asset-tools"><input id="managedAssetSearch" type="search" placeholder="画像を検索" aria-label="管理する画像を検索"><select id="managedAssetFilter" aria-label="管理する画像の表示"><option value="selected">選択中</option><option value="all">すべての画像から追加</option></select></div>
+<p id="managedAssetCount" aria-live="polite"></p><div id="managedAssetGrid" class="managed-asset-grid"></div>
+<div class="managed-asset-pagination"><button type="button" id="managedAssetPrevious">前へ</button><span id="managedAssetPage"></span><button type="button" id="managedAssetNext">次へ</button></div>
+</section><button class="primary-button settings-save" id="settingsSaveButton" value="default">保存</button></form>
+  </dialog>
+
+  <dialog class="save-choice-dialog" id="saveChoiceDialog">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="閉じる">×</button>
+      <h2>保存方法</h2>
+      <div class="save-choice-actions">
+        <button class="secondary-button" id="saveAsPdfButton" type="button">PDF保存</button>
+        <button class="primary-button" id="saveMakecalButton" type="button">.makecal保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="drops-catalog.js?v=23"></script>
+  <script src="app.js?v=23"></script>
+</body>
+</html>
