@@ -540,14 +540,19 @@ function getWeekdayLabel(dayIndex, textStyle, long = false) {
   return `${source[dayIndex]}${long ? (textStyle === "hiragana" ? "ようび" : "曜日") : ""}`;
 }
 
-// 週の開始曜日に合わせて曜日番号の並び順を返す。
+// Weekは指定日の曜日から7日間、Monthは週の始まり設定に合わせて並べる。
 function getWeekOrder(calendar) {
+  if (calendar.type === "week") {
+    const firstDay = new Date(`${calendar.date}T00:00:00`).getDay();
+    return Array.from({ length: 7 }, (_, index) => (firstDay + index) % 7);
+  }
   return calendar.weekStart === "sunday" ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5, 6, 0];
 }
 
-// 選択された日付を含む週の先頭日を計算する。
+// Weekは指定日そのもの、その他は設定された曜日の週頭を返す。
 function getWeekStartDate(calendar) {
   const date = new Date(`${calendar.date}T00:00:00`);
+  if (calendar.type === "week") return date;
   const firstDay = calendar.weekStart === "sunday" ? 0 : 1;
   const difference = (date.getDay() - firstDay + 7) % 7;
   date.setDate(date.getDate() - difference);
@@ -713,7 +718,7 @@ function renderEditorSettings(calendar) {
   const dateInput = document.querySelector("#calendarDate");
   dateInput.type = calendar.type === "month" ? "month" : "date";
   dateInput.value = calendar.type === "month" ? calendar.date.slice(0, 7) : calendar.date;
-  document.querySelector("#calendarDateLabel").textContent = calendar.type === "month" ? "カレンダーの月" : "カレンダーの日付";
+  document.querySelector("#calendarDateLabel").textContent = calendar.type === "month" ? "カレンダーの月" : calendar.type === "week" ? "カレンダーの初めの日付" : "カレンダーの日付";
   document.querySelector("#textStyleLabel").textContent = calendar.type === "week" ? "曜日の表記" : "日付の表記";
   document.querySelector("#calendarBackground").value = calendar.background;
   document.querySelector("#textStyle").value = calendar.textStyle;
