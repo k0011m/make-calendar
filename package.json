@@ -2,6 +2,7 @@
   "name": "make-illustration-calendar",
   "private": true,
   "scripts": {
+    "test": "node --test tests/calendar.test.cjs",
     "build": "node build.mjs"
   }
 }

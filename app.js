@@ -210,7 +210,7 @@ function createDefaultState() {
   day.slots = createDaySlots([0, 1, 2, 3, 4, 9, 10]);
   const week = createCalendar("week", "こんしゅうの予定", today, 60000);
   week.weekDays = createWeekDays([2, 3, 4, 5, 6, 7, 8]);
-  const month = createCalendar("month", "9月のカレンダー", today, 120000);
+  const month = createCalendar("month", `${Number(today.slice(5, 7))}月のカレンダー`, today, 120000);
   month.monthDays = createMonthDays(today, [4, 5, 6, 7, 8, 9, 11]);
   return { customAssets: [], calendars: [day, week, month], preferences: { largeText: false, highContrast: false } };
 }
@@ -812,13 +812,14 @@ function createExportFileName(title) {
 function exportCurrentCalendar() {
   const calendar = getActiveCalendar();
   if (!calendar) return;
-  const usedAssetIds = new Set(getCalendarItemCollections(calendar).flat().filter(item => item.custom).map(item => item.id));
+  // 一覧から削除しても予定に残っている画像を、共有先で復元できるよう同梱する。
+  const usedAssets = new Map(getCalendarItemCollections(calendar).flat().filter(item => item.custom).map(item => [item.id, item]));
   const payload = {
     format: "make-illustration-calendar",
     version: 1,
     exportedAt: new Date().toISOString(),
     calendar: structuredClone(calendar),
-    assets: state.customAssets.filter(asset => usedAssetIds.has(asset.id)).map(asset => structuredClone(asset))
+    assets: [...usedAssets.values()].map(asset => structuredClone(asset))
   };
   saveTextDownload(JSON.stringify(payload, null, 2), createExportFileName(calendar.title), "application/vnd.make-calendar+json");
   showToast("共有ファイルを書き出しました");
@@ -888,7 +889,15 @@ async function importCalendarFile(file) {
     calendar.id = createId("calendar");
     calendar.createdAt = new Date().toISOString();
     calendar.updatedAt = calendar.createdAt;
-    if (calendar.type === "day") calendar.slots.forEach(slot => { slot.id = createId("slot"); });
+    if (calendar.type === "day") {
+      const colors = {};
+      calendar.slots.forEach(slot => {
+        const color = calendar.scheduleColors[slot.id];
+        slot.id = createId("slot");
+        if (color) colors[slot.id] = color;
+      });
+      calendar.scheduleColors = colors;
+    }
     normalizeCalendar(calendar, state.calendars.length);
     const assets = remapImportedAssets(calendar, Array.isArray(payload.assets) ? payload.assets : []);
     const previousAssets = state.customAssets;
@@ -1057,7 +1066,7 @@ async function createNewCalendar() {
 
 // 標準シンボルの読込完了を待ってから印刷し、初回のPDFでも画像抜けを防ぐ。
 async function printCurrentCalendar(asPdf = false) {
-  saveCalendar();
+  if (!saveCalendar()) return;
   try {
     await Promise.all([...calendarCanvas.querySelectorAll("img")].map(image => image.decode()));
   } catch (_) {
