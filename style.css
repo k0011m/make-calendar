@@ -295,10 +295,9 @@ dialog form { position: relative; }
 .month-cell { min-height: 0; padding: 2px; border: 0; border-bottom: 1px solid #ddd; }
 .month-cell.blank { background: transparent; border: 0; }
 .month-day-number { border-bottom: 1px solid #888; font-size: 12px; text-align: center; font-weight: 400; }
-.month-cell .placed-items { min-height: 0; height: calc(100% - 18px); display: flex; flex-wrap: nowrap; border: 1px dotted #eee; }
-.month-cell .placed-item { flex: 1; min-height: 0; height: 40px; }
+.month-cell .placed-items { min-height: 0; height: calc(100% - 18px); display: flex; flex-wrap: nowrap; border: 0; }
+.month-cell .placed-item { flex: 1; min-height: 0; }
 .month-cell .placed-icon { font-size: 26px; }
-.month-cell .placed-item img { height: 34px; }
 .month-cell > .add-to-slot { position: absolute; bottom: 0; left: 0; opacity: 0; }
 .month-cell:hover > .add-to-slot, .month-cell:focus-within > .add-to-slot { opacity: 1; }
 .canvas-footer .primary-button { min-width: 108px; min-height: 42px; font-size: 18px; }
@@ -322,9 +321,7 @@ dialog form { position: relative; }
 .preview-paper .month-grid { grid-template-rows: 5cqw repeat(var(--month-rows), minmax(0, 1fr)); gap: .7cqw; }
 .preview-paper .month-weekday { font-size: 2.5cqw; padding: 0; }
 .preview-paper .month-day-number { font-size: 2cqw; }
-.preview-paper .month-cell .placed-item { height: 6cqw; }
 .preview-paper .month-cell .placed-icon { font-size: 5cqw; }
-.preview-paper .month-cell .placed-item img { height: 6cqw; }
 .preview-paper .month-cell .placed-items { height: calc(100% - 3cqw); }
 .preview-paper .slot-controls, .preview-paper .delete-time-button, .preview-paper .add-to-slot, .preview-paper .remove-mark { display: none !important; }
 .library-dialog form { padding: 21px; }
@@ -570,7 +567,7 @@ input, select, textarea { color: #000; }
 .calendar-paper .placement-cell img { width: 100%; height: 100%; max-height: 100%; object-fit: contain; }
 .week-drop { background: none; }
 .week-drop .placed-items { height: 100%; grid-auto-rows: minmax(0, 1fr); }
-.month-cell .placed-items { display: flex; }
+.month-cell .placed-items { display: flex; flex-direction: row; }
 .month-cell .placement-cell { flex: 1 1 0; }
 @media print {
   .calendar-paper .empty-cell { border-color: #ddd; }

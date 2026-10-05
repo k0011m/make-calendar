@@ -227,7 +227,7 @@ function normalizeCalendar(calendar, index) {
   calendar.textStyle ||= "kanji";
   if (!["kanji", "hiragana", "clock"].includes(calendar.timeStyle)) calendar.timeStyle = "kanji";
   calendar.weekStart ||= "monday";
-  calendar.monthCellCount ||= 2;
+  calendar.monthCellCount = Number(calendar.monthCellCount) === 1 ? 1 : 2;
   if (calendar.type === "day") {
     calendar.slots ||= createDaySlots();
     calendar.slots.forEach(slot => {
@@ -573,7 +573,8 @@ function getPositionedItems(items) {
 // 空きマスを含む配置ボタンを描画し、クリックとドロップの位置を共通化する。
 function renderPlacedItems(items, targetKey, baseCount = 5) {
   const positioned = getPositionedItems(items);
-  const count = Math.max(baseCount, ...positioned.map(item => item.cellIndex + 1));
+  // Monthは選択した枠数だけ表示し、非表示になった既存画像はデータに残す。
+  const count = targetKey.startsWith('month:') ? baseCount : Math.max(baseCount, ...positioned.map(item => item.cellIndex + 1));
   return Array.from({ length: count }, (_, cellIndex) => {
     const index = positioned.findIndex(item => item.cellIndex === cellIndex);
     const item = positioned[index];
@@ -852,7 +853,7 @@ function sanitizeImportedCalendar(calendar) {
   calendar.textStyle = ["kanji", "hiragana"].includes(calendar.textStyle) ? calendar.textStyle : "kanji";
   calendar.timeStyle = ["kanji", "hiragana", "clock"].includes(calendar.timeStyle) ? calendar.timeStyle : "kanji";
   calendar.weekStart = ["monday", "sunday"].includes(calendar.weekStart) ? calendar.weekStart : "monday";
-  calendar.monthCellCount = [1, 2, 3].includes(Number(calendar.monthCellCount)) ? Number(calendar.monthCellCount) : 2;
+  calendar.monthCellCount = Number(calendar.monthCellCount) === 1 ? 1 : 2;
 }
 
 // 共有データ内の画像IDを新しいIDへ置き換え、既存画像との衝突を防ぐ。

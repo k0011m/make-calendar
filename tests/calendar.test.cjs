@@ -17,6 +17,17 @@ function loadFunctions(names, extra = {}) {
 }
 const names = ['getWeekOrder', 'getWeekStartDate', 'getDaysInMonth', 'getPositionedItems', 'formatDayTime', 'safeCalendarColor', 'getColorPreset', 'getPaperColor', 'getScheduleColor', 'getCalendarItemCollections', 'createExportFileName', 'exportCurrentCalendar', 'validateImportPayload', 'isValidItemCollection', 'sanitizeImportedCalendar', 'remapImportedAssets', 'importCalendarFile'];
 
+test('Monthは未配置でも2枠を描画し、枠数を減らしても元データを削除しない', () => {
+  const c = loadFunctions(['getPositionedItems', 'renderPlacedItems', 'escapeHtml'], {assetVisual:()=>'<img>'});
+  const items = [{label:'予定',cellIndex:0},{label:'右側',cellIndex:1},{label:'旧3枠目',cellIndex:2}];
+  assert.equal((c.renderPlacedItems([], 'month:1', 2).match(/<button/g)||[]).length, 2);
+  const html = c.renderPlacedItems(items, 'month:1', 2);
+  assert.equal((html.match(/<button/g)||[]).length, 2);
+  assert.ok(html.includes('data-cell-index="1"'));
+  assert.equal((c.renderPlacedItems(items, 'month:1', 1).match(/<button/g)||[]).length, 1);
+  assert.equal(items.length, 3);
+});
+
 test('指定日を先頭とする7日間と月境界', () => {
   const c = loadFunctions(names);
   for (const date of ['2026-10-06', '2026-12-31', '2027-01-01']) {
